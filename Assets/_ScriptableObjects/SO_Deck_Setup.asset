@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c5f870aa3bc24a47a47ab67852dc3a5, type: 3}
+  m_Name: SO_Deck_Setup
+  m_EditorClassIdentifier: 
+  deckColor: 0
+  faceUpRotation: {x: -0.70710677, y: 0, z: 0, w: 0.70710677}
+  faceDownRotation: {x: 0.70710677, y: 0, z: 0, w: 0.70710677}
+  defaultScale: {x: 1, y: 1, z: 1}
+  deckPile: {fileID: 5384285366203481141, guid: ced930dde5a2a704abf1da26cd40e049, type: 3}
