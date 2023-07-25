@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9031034669013450346}
   - component: {fileID: 2324993881199097454}
+  - component: {fileID: -2114322860862370428}
   m_Layer: 0
   m_Name: PFB_Card_Diamond_12
   m_TagString: Untagged
@@ -50,3 +51,16 @@ MonoBehaviour:
   blueBack: {fileID: 7349598165893746992, guid: 527be08438e77c647b3bff00ce5cc256, type: 3}
   redBack: {fileID: 7349598165893746992, guid: 8b7888a9e7ead434c9804dcd910d457f, type: 3}
   faceUp: 1
+--- !u!65 &-2114322860862370428
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5995813060482964137}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 6.375993, y: 9.407138, z: 1}
+  m_Center: {x: 0.057191372, y: -0.028595924, z: 0}

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9031034669013450346}
   - component: {fileID: 2324993881199097454}
+  - component: {fileID: 2486794018318726340}
   m_Layer: 0
   m_Name: PFB_Card_Spade_03
   m_TagString: Untagged
@@ -50,3 +51,16 @@ MonoBehaviour:
   blueBack: {fileID: 1138510310478055048, guid: 709cd623e685a1d4ea516e9458bd6a56, type: 3}
   redBack: {fileID: 1138510310478055048, guid: 7b901bf02930bb64f962415beb649a34, type: 3}
   faceUp: 1
+--- !u!65 &2486794018318726340
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5995813060482964137}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 6.375993, y: 9.407138, z: 1}
+  m_Center: {x: 0.057191372, y: -0.028595924, z: 0}
