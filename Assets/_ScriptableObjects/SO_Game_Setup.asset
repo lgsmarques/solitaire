@@ -28,5 +28,5 @@ MonoBehaviour:
   - {fileID: 1536011563912628631, guid: a8dad8082544c014db1f88913a831c78, type: 3}
   discardPileIncrease: {x: 0, y: 0, z: -0.25}
   cardColumnIncrease: {x: 0, y: -2.5, z: -0.25}
-  cardPlaceholder: {fileID: 5987406020781135475, guid: 6bf4984983f077740b5ed85aeb9465f4, type: 3}
+  cardPlaceholder: {fileID: 8917182201742223717, guid: b89ee5a27dea07f479820eed68e2686f, type: 3}
   placeholderPlacement: {x: 0, y: 0, z: 0.25}
