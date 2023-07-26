@@ -7,7 +7,7 @@ public class SOGameSetup : ScriptableObject
 {
     [Header("Card Places")]
     public List<Transform> startPoints;
-    public Vector3 discardPileIncrease = new(0, 0, -0.25f);
+    public Vector3 pilesIncrease = new(0, 0, -0.25f);
     public Vector3 cardColumnIncrease = new(0, -2.5f, -0.25f);
 
     [Header("Card Placeholder")]

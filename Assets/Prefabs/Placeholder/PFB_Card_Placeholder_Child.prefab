@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1736090834159803990}
   - component: {fileID: 5416524136596103855}
   m_Layer: 0
-  m_Name: PFB_Card_Placeholder2
+  m_Name: PFB_Card_Placeholder_Child
   m_TagString: CardPlaceholder
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

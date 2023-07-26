@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Core.Singleton;
 
 public class GameManager : Singleton<GameManager>
@@ -26,6 +27,10 @@ public class GameManager : Singleton<GameManager>
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(0);
+        }
     }
 
     private void Init()
@@ -58,11 +63,11 @@ public class GameManager : Singleton<GameManager>
             for (int j = 0; j < i; j++)
             {
                 _cardsHiddenInColumns[i].AddRange(DeckManager.Instance.DrawCards(1, _cardsColumns[i].position, false));
-                Vector3 nextColumnPosition = _cardsColumns[i].position + soGameSetup.cardColumnIncrease;
-                _cardsColumns[i].position = nextColumnPosition;
+                _cardsColumns[i].position = NextPosition(_cardsColumns[i].position, soGameSetup.cardColumnIncrease);
             }
 
             _cardsShownInColumns[i].AddRange(DeckManager.Instance.DrawCards(1, _cardsColumns[i].position));
+            _cardsColumns[i].position = NextPosition(_cardsColumns[i].position, soGameSetup.cardColumnIncrease);
         }
     }
 
@@ -72,14 +77,19 @@ public class GameManager : Singleton<GameManager>
         {
             _cardsInSuitPiles.Add(new List<GameObject>());
             _cardsInSuitPiles[i].Add(Instantiate(soGameSetup.cardPlaceholder, _suitsPiles[i].position + soGameSetup.placeholderPlacement, Quaternion.Euler(0f, 0f, 0f)));
+            _suitsPiles[i].position = NextPosition(_suitsPiles[i].position, soGameSetup.pilesIncrease);
         }
     }
 
     public void DrawToDiscardPile()
     {
         _cardsInDiscardPile.AddRange(DeckManager.Instance.DrawCards(1, _discardPile.position));
-        Vector3 nextPosition = _discardPile.position + soGameSetup.discardPileIncrease;
-        _discardPile.position = nextPosition;
+        _discardPile.position = NextPosition(_discardPile.position, soGameSetup.pilesIncrease);
+    }
+
+    public Vector3 NextPosition(Vector3 currentPosition, Vector3 increase)
+    {
+        return currentPosition + increase;
     }
 
     public bool PlaceCard(GameObject card)
@@ -89,12 +99,10 @@ public class GameManager : Singleton<GameManager>
 
         if (Physics.Raycast(card.transform.position, direction, out hit))
         {
-            if (hit.collider.CompareTag("CardPlaceholder"))
-            {
-                Vector3 newPosition = hit.transform.position + soGameSetup.discardPileIncrease;
-                card.transform.position = newPosition;
-                return true;
-            }
+            GameObject hitObject = hit.collider.gameObject;
+
+            if (CheckSuitPile(card, hitObject)) return true;
+
             return false;
         }
         else
@@ -102,4 +110,41 @@ public class GameManager : Singleton<GameManager>
             return false;
         }
     }
+
+    public bool CheckSuitPile(GameObject card, GameObject hitObject)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            if (_cardsInSuitPiles[i].Contains(hitObject))
+            {
+                Card hitObjectComponent = hitObject.GetComponent<Card>();
+                Card cardComponent = card.GetComponent<Card>();
+
+                if(!hitObjectComponent)
+                {
+                    if(cardComponent.value == Card.Values.Ace)
+                    {
+                        _cardsInSuitPiles[i].Add(card);
+                        card.transform.position = _suitsPiles[i].position;
+                        _suitsPiles[i].position = NextPosition(_suitsPiles[i].position, soGameSetup.pilesIncrease);
+                        return true;
+                    }
+                }
+
+                if(hitObjectComponent)
+                {
+                    if (hitObjectComponent.value == (cardComponent.value - 1) && hitObjectComponent.suit == cardComponent.suit)
+                    {
+                        _cardsInSuitPiles[i].Add(card);
+                        card.transform.position = _suitsPiles[i].position;
+                        _suitsPiles[i].position = NextPosition(_suitsPiles[i].position, soGameSetup.pilesIncrease);
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+    
 }
