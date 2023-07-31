@@ -11,6 +11,10 @@ TagManager:
   - DeckPile
   - StartPoints
   - CardPlaceholder
+  - CardsInPlayDiscard
+  - CardsInPlaySuitPile
+  - CardsInPlayShownColumn
+  - CardsInPlayHiddenColumn
   layers:
   - Default
   - TransparentFX

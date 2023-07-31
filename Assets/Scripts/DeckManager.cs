@@ -20,13 +20,9 @@ public class DeckManager : Singleton<DeckManager>
 
     //private void Update()
     //{
-    //    if(Input.GetKeyDown(KeyCode.Space))
+    //    if (Input.GetKeyDown(KeyCode.A))
     //    {
-    //        InstantiateDeck(GameManager.Instance.startPoints[0].position);
-    //    }
-    //    if(Input.GetKeyDown(KeyCode.A))
-    //    {
-    //        DestroyDeck();
+    //        DestroyAllCards();
     //    }
     //}
 
@@ -68,15 +64,17 @@ public class DeckManager : Singleton<DeckManager>
         deck = shuffledDeck;
     }
 
-    public List<GameObject> DrawCards(int amount, Vector3 position, bool faceUp = true)
+    public List<GameObject> DrawCards(int amount, Vector3 position, GameObject parent, bool faceUp = true)
     {
         List<GameObject> curentCards = new();
         
         for (int i = 0; i < amount; i++)
         {
             if (deck.Count <= 0) break;
-            
-            curentCards.Add(InstantiateCard(deck.FirstOrDefault(), position, faceUp));
+
+            GameObject currentCard = InstantiateCard(deck.FirstOrDefault(), position, faceUp);
+            currentCard.transform.parent = parent.transform;
+            curentCards.Add(currentCard);
             deck.RemoveAt(0);
         }
 
@@ -93,7 +91,6 @@ public class DeckManager : Singleton<DeckManager>
     public GameObject InstantiateCard(GameObject card, Vector3 position, bool faceUp = true)
     {
         _cardParent = Instantiate(card);
-        _cardParent.transform.parent = GameObject.FindWithTag("CardsInPlay").transform;
         _cardParent.transform.position = position;
         _cardParent.GetComponent<Card>().faceUp = faceUp;
 
@@ -115,12 +112,17 @@ public class DeckManager : Singleton<DeckManager>
 
     public void DestroyAllCards()
     {
-        int cardCount = GameObject.FindWithTag("CardsInPlay").transform.childCount;
+        GameObject cardsInPlay = GameObject.FindWithTag("CardsInPlay");
 
-        for (int i = cardCount - 1; i >= 0; i--)
+        foreach (Transform child in cardsInPlay.transform )
         {
-            GameObject card = GameObject.FindWithTag("CardsInPlay").transform.GetChild(i).gameObject;
-            Destroy(card);
+            int cardCount = child.childCount;
+
+            for (int i = cardCount - 1; i >= 0; i--)
+            {
+                GameObject card = child.GetChild(i).gameObject;
+                Destroy(card);
+            }
         }
     }
     #endregion

@@ -39,9 +39,12 @@ public class Card : MonoBehaviour
     }
     private void OnMouseDown()
     {
-        initialPosition = gameObject.transform.position;
-        isDraging = true;
-        offset = gameObject.transform.position - GetMouseWorldPosition();
+        if(!gameObject.transform.parent.CompareTag("CardsInPlaySuitPile"))
+        { 
+            initialPosition = gameObject.transform.position;
+            isDraging = true;
+            offset = gameObject.transform.position - GetMouseWorldPosition();
+        }
     }
 
     private void OnMouseDrag()
@@ -56,10 +59,12 @@ public class Card : MonoBehaviour
 
     private void OnMouseUp()
     {
-        bool cardPlaced = GameManager.Instance.PlaceCard(gameObject);
+        if (isDraging)
+        { 
+            bool cardPlaced = GameManager.Instance.PlaceCard(gameObject);
 
-        if (!cardPlaced) gameObject.transform.position = initialPosition;
-
+            if (!cardPlaced) gameObject.transform.position = initialPosition;
+        }
         isDraging = false;
     }
 
