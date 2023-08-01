@@ -59,6 +59,9 @@ public class GameManager : Singleton<GameManager>
     {
         for (int i = 0; i < 7; i++)
         {
+            GameObject placeholder = Instantiate(soGameSetup.cardPlaceholderColumn, cardsColumns[i].position + soGameSetup.placeholderPlacement, Quaternion.Euler(0f, 0f, 0f));
+            placeholder.transform.parent = cardsShownInColumns[i].transform;
+
             for (int j = 0; j < i; j++)
             {
                 DeckManager.Instance.DrawCards(1, cardsColumns[i].position, cardsHiddenInColumns[i], false);
@@ -74,7 +77,7 @@ public class GameManager : Singleton<GameManager>
     {
         for (int i = 0; i < 4; i++)
         {
-            GameObject placeholder = Instantiate(soGameSetup.cardPlaceholder, suitsPiles[i].position + soGameSetup.placeholderPlacement, Quaternion.Euler(0f, 0f, 0f));
+            GameObject placeholder = Instantiate(soGameSetup.cardPlaceholderSuit, suitsPiles[i].position + soGameSetup.placeholderPlacement, Quaternion.Euler(0f, 0f, 0f));
             placeholder.transform.parent = cardsInSuitPiles[i].transform;
             suitsPiles[i].position = NextPosition(suitsPiles[i].position, soGameSetup.pilesIncrease);
         }
@@ -95,27 +98,35 @@ public class GameManager : Singleton<GameManager>
     {
         int cardsInCollumn = cardsHiddenInColumns[columnIndex].transform.childCount;
         if (cardsInCollumn > 0)
-        { 
+        {
             GameObject lastCard = cardsHiddenInColumns[columnIndex].transform.GetChild(cardsInCollumn - 1).gameObject;
             lastCard.transform.parent = cardsShownInColumns[columnIndex].transform;
             lastCard.GetComponent<Card>().faceUp = true;
             lastCard.transform.GetChild(0).transform.rotation = soDeckSetup.faceUpRotation;
         }
+        cardsColumns[columnIndex].position = NextPosition(cardsColumns[columnIndex].position, -soGameSetup.cardColumnIncrease);
     }
 
     public bool PlaceCard(GameObject card)
     {
-        Vector3 direction = new Vector3(0, 0, 5);
-        RaycastHit hit;
+        Vector3 direction = new(0, 0, 5);
 
-        if (Physics.Raycast(card.transform.position, direction, out hit))
+        if (Physics.Raycast(card.transform.position, direction, out RaycastHit hit))
         {
             GameObject hitObject = hit.collider.gameObject;
 
             if (hitObject.transform.parent.CompareTag("CardsInPlaySuitPile"))
             {
                 if (SuitPilePlacement(card, hitObject))
-                {                    
+                {
+                    return true;
+                }
+            }
+
+            if (hitObject.transform.parent.CompareTag("CardsInPlayShownColumn"))
+            {
+                if (ColumnPlacement(card, hitObject))
+                {
                     return true;
                 }
             }
@@ -133,7 +144,6 @@ public class GameManager : Singleton<GameManager>
         int index = cardsInSuitPiles.IndexOf(hitObject.transform.parent.gameObject);
 
         GameObject cardInitialParent = card.transform.parent.gameObject;
-        
 
         Card hitObjectComponent = hitObject.GetComponent<Card>();
         Card cardComponent = card.GetComponent<Card>();
@@ -159,5 +169,32 @@ public class GameManager : Singleton<GameManager>
         suitsPiles[index].position = NextPosition(suitsPiles[index].position, soGameSetup.pilesIncrease);
         return true;
     }
-    
+
+    public bool ColumnPlacement(GameObject card, GameObject hitObject)
+    {
+        int index = cardsShownInColumns.IndexOf(hitObject.transform.parent.gameObject);
+
+        GameObject cardInitialParent = card.transform.parent.gameObject;
+
+        Card hitObjectComponent = hitObject.GetComponent<Card>();
+        Card cardComponent = card.GetComponent<Card>();
+
+        if (!hitObjectComponent && cardComponent.value != Card.Values.King) return false;
+
+        if (hitObjectComponent && (hitObjectComponent.value != (cardComponent.value + 1) || hitObjectComponent.CardColor() == cardComponent.CardColor()))
+        {
+            return false;
+        }
+
+        if (cardInitialParent.CompareTag("CardsInPlayShownColumn"))
+        {
+            int columnIndex = cardsShownInColumns.IndexOf(cardInitialParent);
+            TurnCardFaceUp(columnIndex);
+        }
+
+        card.transform.parent = hitObject.transform.parent;
+        card.transform.position = cardsColumns[index].position;
+        cardsColumns[index].position = NextPosition(cardsColumns[index].position, soGameSetup.cardColumnIncrease);
+        return true;
+    }
 }

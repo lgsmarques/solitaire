@@ -27,6 +27,7 @@ public class DeckManager : Singleton<DeckManager>
     //}
 
     #region Deck
+
     public void ResetDeck()
     {
         deck = new List<GameObject>();
@@ -67,7 +68,7 @@ public class DeckManager : Singleton<DeckManager>
     public List<GameObject> DrawCards(int amount, Vector3 position, GameObject parent, bool faceUp = true)
     {
         List<GameObject> curentCards = new();
-        
+
         for (int i = 0; i < amount; i++)
         {
             if (deck.Count <= 0) break;
@@ -85,9 +86,11 @@ public class DeckManager : Singleton<DeckManager>
 
         return curentCards;
     }
-    #endregion
+
+    #endregion Deck
 
     #region Card
+
     public GameObject InstantiateCard(GameObject card, Vector3 position, bool faceUp = true)
     {
         _cardParent = Instantiate(card);
@@ -114,7 +117,7 @@ public class DeckManager : Singleton<DeckManager>
     {
         GameObject cardsInPlay = GameObject.FindWithTag("CardsInPlay");
 
-        foreach (Transform child in cardsInPlay.transform )
+        foreach (Transform child in cardsInPlay.transform)
         {
             int cardCount = child.childCount;
 
@@ -125,15 +128,17 @@ public class DeckManager : Singleton<DeckManager>
             }
         }
     }
-    #endregion
+
+    #endregion Card
 
     #region DeckPile
+
     public void InstantiateDeck(Vector3 position)
     {
         if (!_deckPileParent)
-        { 
+        {
             _deckPileParent = Instantiate(soDeckSetup.deckPile);
-            _deckPileParent.transform.parent = GameObject.FindWithTag("LevelBase").transform ;
+            _deckPileParent.transform.parent = GameObject.FindWithTag("LevelBase").transform;
             _deckPileParent.transform.position = position;
 
             if (soDeckSetup.deckColor == SODeckSetup.Colors.Black) _deckPileChild = Instantiate(_deckPileParent.GetComponent<Deck>().backBlack);
@@ -151,5 +156,6 @@ public class DeckManager : Singleton<DeckManager>
     {
         Destroy(_deckPileParent);
     }
-    #endregion
+
+    #endregion DeckPile
 }

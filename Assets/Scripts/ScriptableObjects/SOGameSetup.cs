@@ -11,6 +11,7 @@ public class SOGameSetup : ScriptableObject
     public Vector3 cardColumnIncrease = new(0, -2.5f, -0.25f);
 
     [Header("Card Placeholder")]
-    public GameObject cardPlaceholder;
+    public GameObject cardPlaceholderSuit;
+    public GameObject cardPlaceholderColumn;
     public Vector3 placeholderPlacement = new(0, 0, 0.25f);
 }

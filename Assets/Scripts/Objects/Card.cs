@@ -37,6 +37,7 @@ public class Card : MonoBehaviour
         Queen = 11, 
         King = 12
     }
+
     private void OnMouseDown()
     {
         if(!gameObject.transform.parent.CompareTag("CardsInPlaySuitPile"))
@@ -73,5 +74,15 @@ public class Card : MonoBehaviour
         Vector3 mousePosition = Input.mousePosition;
 
         return Camera.main.ScreenToWorldPoint(mousePosition);
+    }
+
+    public string CardColor()
+    {
+        return suit switch
+        {
+            Suits.Diamond or Suits.Heart => "Red",
+            Suits.Club or Suits.Spade => "Black",
+            _ => "",
+        };
     }
 }

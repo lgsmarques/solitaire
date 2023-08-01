@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2790685084740254468}
   - component: {fileID: -2006491733959854171}
   m_Layer: 0
-  m_Name: PFB_Card_Placeholder
+  m_Name: PFB_Card_Placeholder_Suit
   m_TagString: CardPlaceholder
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
