@@ -40,33 +40,39 @@ public class Card : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if(!gameObject.transform.parent.CompareTag("CardsInPlaySuitPile"))
+        if(!gameObject.transform.parent.CompareTag("CardsInPlaySuitPile") && faceUp)
         { 
-            initialPosition = gameObject.transform.position;
-            isDraging = true;
-            offset = gameObject.transform.position - GetMouseWorldPosition();
+            //initialPosition = gameObject.transform.position;
+            //isDraging = true;
+            //offset = gameObject.transform.position - GetMouseWorldPosition();
+
+            DragManager.Instance.SetCardsToDrag(gameObject);
         }
     }
 
     private void OnMouseDrag()
     {
-        if (isDraging && faceUp)
+        if (faceUp)
         {
-            Vector3 newPosition = GetMouseWorldPosition() + offset;
-            newPosition.z = 0;
-            gameObject.transform.position = newPosition;
+            //Vector3 newPosition = GetMouseWorldPosition() + offset;
+            //newPosition.z = 0;
+            //gameObject.transform.position = newPosition;
+
+            DragManager.Instance.DragCards();
         }
     }
 
     private void OnMouseUp()
     {
-        if (isDraging)
-        { 
-            bool cardPlaced = GameManager.Instance.PlaceCard(gameObject);
+        //if (isDraging)
+        //{ 
+        
 
-            if (!cardPlaced) gameObject.transform.position = initialPosition;
-        }
-        isDraging = false;
+
+        //}
+        //isDraging = false;
+
+        DragManager.Instance.ReleaseCards();
     }
 
     private Vector3 GetMouseWorldPosition()
