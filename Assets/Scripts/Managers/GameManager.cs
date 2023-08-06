@@ -37,7 +37,7 @@ public class GameManager : Singleton<GameManager>
 
     private void Init()
     {
-        DeckManager.Instance.Shuffle();
+        DeckManager.Instance.ResetDeck();
         StartPlaces();
         StartGame();
         DeckManager.Instance.InstantiateDeck(deckPile.position);

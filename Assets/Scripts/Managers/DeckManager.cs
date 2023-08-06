@@ -8,15 +8,20 @@ using Core.Singleton;
 public class DeckManager : Singleton<DeckManager>
 {
     [Header("Setups")]
-    public SODeckSetup soDeckSetup;
+    public SODeckSetup sODeckSetup;
+    public GameManager gameManager;
 
     [Header("Decks")]
     public List<GameObject> deck;
 
-    private GameObject _deckPileParent;
-    private GameObject _deckPileChild;
-    private GameObject _cardParent;
-    private GameObject _cardChild;
+    [Header("Card Spawn")]
+    public Transform cardSpawn;
+
+    private GameObject deckPileParent;
+    private GameObject deckPileChild;
+    //private GameObject cardParent;
+    //private GameObject cardChild;
+    private GameObject deckPlaceholder;
 
     //private void Update()
     //{
@@ -42,17 +47,19 @@ public class DeckManager : Singleton<DeckManager>
 
             if (prefab != null)
             {
-                deck.Add(prefab);
+                GameObject card = Instantiate(prefab);
+                card.transform.position = cardSpawn.position;
+                deck.Add(card);
             }
         }
+
+        Shuffle();
     }
 
     public void Shuffle()
     {
-        ResetDeck();
-
         int initialDeck = deck.Count();
-        List<GameObject> shuffledDeck = new List<GameObject>();
+        List<GameObject> shuffledDeck = new();
 
         for (int i = 0; i < initialDeck; i++)
         {
@@ -81,7 +88,11 @@ public class DeckManager : Singleton<DeckManager>
 
         if (deck.Count <= 0)
         {
+            Transform deckPlacement = deckPileParent.transform;
             DestroyDeck();
+            deckPlaceholder = Instantiate(sODeckSetup.deckPlaceholder);
+            deckPlaceholder.transform.parent = GameObject.FindWithTag("LevelBase").transform;
+            deckPlaceholder.transform.position = deckPlacement.position;
         }
 
         return curentCards;
@@ -93,24 +104,30 @@ public class DeckManager : Singleton<DeckManager>
 
     public GameObject InstantiateCard(GameObject card, Vector3 position, bool faceUp = true)
     {
-        _cardParent = Instantiate(card);
-        _cardParent.transform.position = position;
-        _cardParent.GetComponent<Card>().faceUp = faceUp;
+        card.transform.position = position;
+        card.GetComponent<Card>().faceUp = faceUp;
+        
+        if (!card.gameObject.activeSelf)
+        {
+            card.SetActive(true);
+        }
 
-        if (soDeckSetup.deckColor == SODeckSetup.Colors.Black) _cardChild = Instantiate(card.GetComponent<Card>().blackBack);
-        else if (soDeckSetup.deckColor == SODeckSetup.Colors.Blue) _cardChild = Instantiate(card.GetComponent<Card>().blueBack);
-        else _cardChild = Instantiate(card.GetComponent<Card>().redBack);
+        GameObject cardChild;
 
-        _cardChild.transform.parent = _cardParent.transform;
-        _cardChild.transform.position = position;
-        _cardChild.transform.localScale = soDeckSetup.defaultScale;
+        if (sODeckSetup.deckColor == SODeckSetup.Colors.Black) cardChild = Instantiate(card.GetComponent<Card>().blackBack);
+        else if (sODeckSetup.deckColor == SODeckSetup.Colors.Blue) cardChild = Instantiate(card.GetComponent<Card>().blueBack);
+        else cardChild = Instantiate(card.GetComponent<Card>().redBack);
 
-        if (_cardParent.GetComponent<Card>().faceUp)
-            _cardChild.transform.rotation = soDeckSetup.faceUpRotation;
+        cardChild.transform.parent = card.transform;
+        cardChild.transform.position = position;
+        cardChild.transform.localScale = sODeckSetup.defaultScale;
+
+        if (card.GetComponent<Card>().faceUp)
+            cardChild.transform.rotation = sODeckSetup.faceUpRotation;
         else
-            _cardChild.transform.rotation = soDeckSetup.faceDownRotation;
+            cardChild.transform.rotation = sODeckSetup.faceDownRotation;
 
-        return _cardParent;
+        return card;
     }
 
     public void DestroyAllCards()
@@ -135,26 +152,50 @@ public class DeckManager : Singleton<DeckManager>
 
     public void InstantiateDeck(Vector3 position)
     {
-        if (!_deckPileParent)
+        if (deckPlaceholder)
         {
-            _deckPileParent = Instantiate(soDeckSetup.deckPile);
-            _deckPileParent.transform.parent = GameObject.FindWithTag("LevelBase").transform;
-            _deckPileParent.transform.position = position;
+            Destroy(deckPlaceholder);
+        }
 
-            if (soDeckSetup.deckColor == SODeckSetup.Colors.Black) _deckPileChild = Instantiate(_deckPileParent.GetComponent<Deck>().backBlack);
-            else if (soDeckSetup.deckColor == SODeckSetup.Colors.Blue) _deckPileChild = Instantiate(_deckPileParent.GetComponent<Deck>().backBlue);
-            else _deckPileChild = Instantiate(_deckPileParent.GetComponent<Deck>().backRed);
+        if (!deckPileParent)
+        {
+            deckPileParent = Instantiate(sODeckSetup.deckPile);
+            deckPileParent.transform.parent = GameObject.FindWithTag("LevelBase").transform;
+            deckPileParent.transform.position = position;
 
-            _deckPileChild.transform.parent = _deckPileParent.transform;
-            _deckPileChild.transform.position = position;
-            _deckPileChild.transform.localScale = soDeckSetup.defaultScale;
-            _deckPileChild.transform.rotation = soDeckSetup.faceUpRotation;
+            if (sODeckSetup.deckColor == SODeckSetup.Colors.Black) deckPileChild = Instantiate(deckPileParent.GetComponent<Deck>().backBlack);
+            else if (sODeckSetup.deckColor == SODeckSetup.Colors.Blue) deckPileChild = Instantiate(deckPileParent.GetComponent<Deck>().backBlue);
+            else deckPileChild = Instantiate(deckPileParent.GetComponent<Deck>().backRed);
+
+            deckPileChild.transform.parent = deckPileParent.transform;
+            deckPileChild.transform.position = position;
+            deckPileChild.transform.localScale = sODeckSetup.defaultScale;
+            deckPileChild.transform.rotation = sODeckSetup.faceUpRotation;
         }
     }
 
     public void DestroyDeck()
     {
-        Destroy(_deckPileParent);
+        Destroy(deckPileParent);
+    }
+
+    public void ResetDeckPile()
+    {
+        GameObject cardsInDiscard = GameObject.FindWithTag("CardsInPlayDiscard").gameObject;
+
+        for (int i = 0; i < cardsInDiscard.transform.childCount; i++)
+        {
+            GameObject child = cardsInDiscard.transform.GetChild(i).gameObject;
+            deck.Add(child);
+            child.SetActive(false);
+            child.transform.position = cardSpawn.position;
+            GameObject childChild = child.transform.GetChild(0).gameObject;
+            Destroy(childChild);
+
+            gameManager.NextPosition(gameManager.discardPile, -gameManager.soGameSetup.pilesIncrease);
+        }
+
+        //Shuffle();
     }
 
     #endregion DeckPile

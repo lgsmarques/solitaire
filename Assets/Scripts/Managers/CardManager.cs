@@ -19,6 +19,10 @@ public class CardManager : Singleton<CardManager>
             int columnIndex = gameManager.cardsShownInColumns.IndexOf(cardInitialParent);
             TurnCardFaceUp(columnIndex);
         }
+        if (cardInitialParent.CompareTag("CardsInPlayDiscard"))
+        {
+            gameManager.NextPosition(gameManager.discardPile, -gameManager.soGameSetup.pilesIncrease);
+        }
     }
 
     public void TurnCardFaceUp(int columnIndex)

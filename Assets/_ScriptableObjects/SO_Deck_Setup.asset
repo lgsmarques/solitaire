@@ -17,3 +17,4 @@ MonoBehaviour:
   faceDownRotation: {x: 0.70710677, y: 0, z: 0, w: 0.70710677}
   defaultScale: {x: 1, y: 1, z: 1}
   deckPile: {fileID: 5384285366203481141, guid: ced930dde5a2a704abf1da26cd40e049, type: 3}
+  deckPlaceholder: {fileID: 8917182201742223717, guid: eba425e5231e8dc4eac25a50b28dbe50, type: 3}

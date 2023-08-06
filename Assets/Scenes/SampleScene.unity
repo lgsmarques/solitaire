@@ -424,8 +424,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fa80abd968b4ca43811eeaa1db680c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soDeckSetup: {fileID: 11400000, guid: b83886e1db7c6d04abd091e8c6b2ed89, type: 2}
+  sODeckSetup: {fileID: 11400000, guid: b83886e1db7c6d04abd091e8c6b2ed89, type: 2}
+  gameManager: {fileID: 29953964}
   deck: []
+  cardSpawn: {fileID: 2282166747564902330, guid: 2b6eaa11d78e2a34c9d7e3ba61d36b38, type: 3}
 --- !u!4 &228431347
 Transform:
   m_ObjectHideFlags: 0

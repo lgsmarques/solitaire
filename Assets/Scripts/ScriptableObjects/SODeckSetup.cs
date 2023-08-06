@@ -11,6 +11,7 @@ public class SODeckSetup : ScriptableObject
     public Quaternion faceDownRotation = Quaternion.Euler(90f, 0f, 0f);
     public Vector3 defaultScale = new(1, 1, 1);
     public GameObject deckPile;
+    public GameObject deckPlaceholder;
 
     public enum Colors
     {
