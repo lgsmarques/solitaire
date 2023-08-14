@@ -15,6 +15,7 @@ TagManager:
   - CardsInPlaySuitPile
   - CardsInPlayShownColumn
   - CardsInPlayHiddenColumn
+  - CardsInDeck
   layers:
   - Default
   - TransparentFX

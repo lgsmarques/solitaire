@@ -5,16 +5,20 @@ using UnityEngine.EventSystems;
 
 public class Card : MonoBehaviour
 {
+    [Header("Card Attributes")]
     public Suits suit;
     public Values value;
+    public bool faceUp;
+
+    [Header("Card Objects")]
     public GameObject blackBack;
     public GameObject blueBack;
     public GameObject redBack;
-    public bool faceUp;
 
-    private Vector3 offset;
-    private Vector3 initialPosition;
-    private bool isDraging = false;
+    [Header("Card Click Control")]
+    public float doubleClickTimeThreshold = 0.2f;
+
+    private float lastClickTime = 0f;
 
     public enum Suits
     {
@@ -41,12 +45,17 @@ public class Card : MonoBehaviour
     private void OnMouseDown()
     {
         if(!gameObject.transform.parent.CompareTag("CardsInPlaySuitPile") && faceUp)
-        { 
-            //initialPosition = gameObject.transform.position;
-            //isDraging = true;
-            //offset = gameObject.transform.position - GetMouseWorldPosition();
+        {
+            if (Time.time - lastClickTime <= doubleClickTimeThreshold)
+            {
+                DragManager.Instance.AutoDragToSuitPlace(gameObject);
+            }
+            else
+            {
+                DragManager.Instance.SetCardsToDrag(gameObject);
+            }
 
-            DragManager.Instance.SetCardsToDrag(gameObject);
+            lastClickTime = Time.time;
         }
     }
 
@@ -54,32 +63,13 @@ public class Card : MonoBehaviour
     {
         if (faceUp)
         {
-            //Vector3 newPosition = GetMouseWorldPosition() + offset;
-            //newPosition.z = 0;
-            //gameObject.transform.position = newPosition;
-
             DragManager.Instance.DragCards();
         }
     }
 
     private void OnMouseUp()
     {
-        //if (isDraging)
-        //{ 
-        
-
-
-        //}
-        //isDraging = false;
-
         DragManager.Instance.ReleaseCards();
-    }
-
-    private Vector3 GetMouseWorldPosition()
-    {
-        Vector3 mousePosition = Input.mousePosition;
-
-        return Camera.main.ScreenToWorldPoint(mousePosition);
     }
 
     public string CardColor()

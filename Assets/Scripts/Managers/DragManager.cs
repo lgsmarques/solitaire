@@ -57,13 +57,16 @@ public class DragManager : Singleton<DragManager>
 
     public void ReleaseCards()
     {
-        bool cardPlaced = CardManager.Instance.PlaceCards(cardsToDrag);
+        if (isDraging)
+        { 
+            bool cardPlaced = CardManager.Instance.PlaceCards(cardsToDrag);
 
-        if (!cardPlaced)
-        {
-            for (int i = 0; i < cardsToDrag.Count; i++)
+            if (!cardPlaced)
             {
-                cardsToDrag[i].transform.position = cardsToDragInitialPositions[i];
+                for (int i = 0; i < cardsToDrag.Count; i++)
+                {
+                    cardsToDrag[i].transform.position = cardsToDragInitialPositions[i];
+                }
             }
         }
 
@@ -71,6 +74,27 @@ public class DragManager : Singleton<DragManager>
         cardsToDragInitialPositions = new();
         cardsToDragOffsets = new();
         isDraging = false;
+    }
+
+    public void AutoDragToSuitPlace(GameObject card)
+    {
+        if (card.transform.parent.CompareTag("CardsInPlayShownColumn"))
+        {
+            GameObject collumn = card.transform.parent.gameObject;
+
+            if (collumn.transform.GetChild(collumn.transform.childCount - 1).gameObject != card)
+            {
+                return;
+            }
+        }
+
+        List<GameObject> suitPilesParentList = GameManager.Instance.cardsInSuitPiles;
+
+        foreach (GameObject suitPileParent in suitPilesParentList)
+        {
+            bool cardPlaced = CardManager.Instance.SuitPilePlacement(card, suitPileParent.transform.GetChild(suitPileParent.transform.childCount - 1).gameObject);
+            if (cardPlaced) break;
+        }
     }
 
     private Vector3 GetMouseWorldPosition()

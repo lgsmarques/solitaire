@@ -9,7 +9,7 @@ public class CardManager : Singleton<CardManager>
 
     public void MoveCard(GameObject card, Transform parent, Transform position)
     {
-        GameObject cardInitialParent = card.transform.parent.gameObject;              
+        GameObject cardInitialParent = card.transform.parent.gameObject;
 
         card.transform.parent = parent;
         card.transform.position = position.position;

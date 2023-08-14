@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5995813060482964137}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 28, y: -3.5, z: 3.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -50,7 +50,7 @@ MonoBehaviour:
   blackBack: {fileID: 7227086467103658190, guid: 4b7b96de18487b0428cdfe7a82b63bd2, type: 3}
   blueBack: {fileID: 7227086467103658190, guid: 620c87bdd851fd4438708a75ad328e36, type: 3}
   redBack: {fileID: 7227086467103658190, guid: faaf732e116473149bc526cf6da226e8, type: 3}
-  faceUp: 1
+  faceUp: 0
 --- !u!65 &-7450353172412570586
 BoxCollider:
   m_ObjectHideFlags: 0
